@@ -38,9 +38,9 @@ function createTables() {
     CREATE TABLE IF NOT EXISTS products (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
-      roast_level TEXT NOT NULL CHECK(roast_level IN ('Light', 'Medium', 'Dark')),
-      type TEXT NOT NULL CHECK(type IN ('Plain', 'Spiced', 'Flavored')),
-      packaging_form TEXT NOT NULL CHECK(packaging_form IN ('Quad Seal', 'Centre Seal', 'Stand Up Pouch', 'Flat Bottom')),
+      roast_level TEXT NOT NULL CHECK(roast_level IN ('فاتح', 'متوسط', 'غامق')),
+      type TEXT NOT NULL CHECK(type IN ('سادة', 'بتوابل', 'بنكهة')),
+      packaging_form TEXT NOT NULL CHECK(packaging_form IN ('كواد سيل', 'سنتر سيل', 'ستاند أب باوتش', 'فلات بوتوم')),
       price REAL NOT NULL DEFAULT 0,
       cost REAL NOT NULL DEFAULT 0,
       stock_quantity INTEGER NOT NULL DEFAULT 0,
@@ -51,7 +51,7 @@ function createTables() {
     CREATE TABLE IF NOT EXISTS orders (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       customer_id INTEGER,
-      status TEXT NOT NULL DEFAULT 'Pending' CHECK(status IN ('Pending', 'Out for Delivery', 'Completed')),
+      status TEXT NOT NULL DEFAULT 'قيد الانتظار' CHECK(status IN ('قيد الانتظار', 'جاري التوصيل', 'مكتمل')),
       delivery_driver TEXT,
       delivery_fee REAL NOT NULL DEFAULT 0,
       total_amount REAL NOT NULL DEFAULT 0,
@@ -247,9 +247,7 @@ export function getFinanceSummary() {
   const db = getDatabase()
 
   const revenue = db
-    .prepare(
-      `SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE status = 'Completed'`
-    )
+    .prepare(`SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE status = 'مكتمل'`)
     .get()
 
   const expenses = db.prepare(`SELECT COALESCE(SUM(amount), 0) as total FROM expenses`).get()
@@ -262,7 +260,7 @@ export function getFinanceSummary() {
      FROM order_items oi
      JOIN orders o ON oi.order_id = o.id
      JOIN products p ON oi.product_id = p.id
-     WHERE o.status = 'Completed'`
+     WHERE o.status = 'مكتمل'`
     )
     .get()
 
