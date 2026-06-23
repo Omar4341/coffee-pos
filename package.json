@@ -21,7 +21,9 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "better-sqlite3": "^12.11.1",
-    "react-router-dom": "^7.18.0"
+    "qrcode-terminal": "^0.12.0",
+    "react-router-dom": "^7.18.0",
+    "whatsapp-web.js": "^1.34.7"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^2.1.0",

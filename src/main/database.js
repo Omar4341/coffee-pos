@@ -273,6 +273,20 @@ export function deleteDeliveryPerson(id) {
 }
 
 // ── Order CRUD ──
+export function getOrderById(id) {
+  return getDatabase()
+    .prepare(
+      `SELECT o.*, c.name as customer_name, c.phone as customer_phone,
+       dp.name as delivery_person_name, dz.area_name as zone_name
+     FROM orders o
+     LEFT JOIN customers c ON o.customer_id = c.id
+     LEFT JOIN delivery_persons dp ON o.delivery_person_id = dp.id
+     LEFT JOIN delivery_zones dz ON o.delivery_zone_id = dz.id
+     WHERE o.id = ?`
+    )
+    .get(id)
+}
+
 export function getAllOrders() {
   return getDatabase()
     .prepare(
