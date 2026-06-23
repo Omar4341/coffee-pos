@@ -2,36 +2,38 @@
   display: flex;
   flex-direction: row-reverse;
   height: 100vh;
-  background: #f5f5f5;
+  background: #faf6f0;
 }
 
 .sidebar {
-  width: 220px;
-  background: #1a1a2e;
-  color: #fff;
+  width: 230px;
+  background: #2a1f14;
+  color: #f0dfc0;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
 }
 
 .sidebar-header {
-  padding: 24px 20px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: right;
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid rgba(240, 223, 192, 0.15);
+  text-align: center;
 }
 
-.sidebar-header h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: #c4a35a;
+.sidebar-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 6px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .sidebar-header .subtitle {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 13px;
+  color: #d4b896;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .sidebar-nav {
@@ -49,20 +51,20 @@
   padding: 12px 16px;
   border-radius: 8px;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.7);
+  color: #d4b896;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s;
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: rgba(240, 223, 192, 0.1);
+  color: #f0dfc0;
 }
 
 .nav-item.active {
-  background: #c4a35a;
-  color: #1a1a2e;
+  background: #8b5e3c;
+  color: #fff;
   font-weight: 600;
 }
 

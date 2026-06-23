@@ -92,7 +92,7 @@ function registerIpcHandlers() {
 }
 
 app.whenReady().then(() => {
-  electronApp.setAppUserModelId('com.coffee-pos')
+  electronApp.setAppUserModelId('com.ben-alaraishy')
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)

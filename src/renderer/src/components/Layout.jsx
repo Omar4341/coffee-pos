@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import logoImg from '../assets/logo.png'
 import './Layout.css'
 
 const navItems = [
@@ -13,8 +14,8 @@ function Layout() {
     <div className="app-layout">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <h2>كوفي بوس</h2>
-          <span className="subtitle">نظام نقاط البيع</span>
+          <img src={logoImg} alt="بن العريشي" className="sidebar-logo" />
+          <span className="subtitle">سيستم بن العريشي</span>
         </div>
         <nav className="sidebar-nav">
           {navItems.map((item) => (
