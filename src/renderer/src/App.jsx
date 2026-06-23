@@ -4,6 +4,7 @@ import Inventory from './pages/Inventory'
 import Orders from './pages/Orders'
 import Finance from './pages/Finance'
 import Customers from './pages/Customers'
+import Delivery from './pages/Delivery'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="finance" element={<Finance />} />
           <Route path="customers" element={<Customers />} />
+          <Route path="delivery" element={<Delivery />} />
         </Route>
       </Routes>
     </HashRouter>

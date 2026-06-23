@@ -4,7 +4,7 @@ const emptyProduct = {
   name: '',
   roast_level: 'متوسط',
   type: 'سادة',
-  packaging_form: 'كواد سيل',
+  image: null,
   price: '',
   cost: '',
   stock_quantity: ''
@@ -42,12 +42,19 @@ function Inventory() {
       name: product.name,
       roast_level: product.roast_level,
       type: product.type,
-      packaging_form: product.packaging_form,
+      image: product.image || null,
       price: String(product.price),
       cost: String(product.cost),
       stock_quantity: String(product.stock_quantity)
     })
     setShowModal(true)
+  }
+
+  const handlePickImage = async () => {
+    const dataUrl = await window.api.pickProductImage()
+    if (dataUrl) {
+      setForm({ ...form, image: dataUrl })
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -103,10 +110,10 @@ function Inventory() {
           <table>
             <thead>
               <tr>
+                <th>صورة</th>
                 <th>الاسم</th>
                 <th>درجة التحميص</th>
                 <th>النوع</th>
-                <th>التغليف</th>
                 <th>السعر</th>
                 <th>التكلفة</th>
                 <th>المخزون</th>
@@ -117,18 +124,37 @@ function Inventory() {
               {products.map((p) => (
                 <tr key={p.id}>
                   <td>
+                    {p.image ? (
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        style={{ width: 40, height: 40, borderRadius: 6, objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <span style={{ fontSize: 24 }}>☕</span>
+                    )}
+                  </td>
+                  <td>
                     <strong>{p.name}</strong>
                     <br />
                     <span style={{ fontSize: 11, color: '#999' }}>كيس 200 جرام</span>
                   </td>
                   <td>{p.roast_level}</td>
                   <td>{p.type}</td>
-                  <td>{p.packaging_form}</td>
                   <td>{p.price.toFixed(2)} ج.م</td>
                   <td>{p.cost.toFixed(2)} ج.م</td>
                   <td>
-                    <strong style={{ color: p.stock_quantity < 10 ? '#e74c3c' : '#333' }}>
-                      {p.stock_quantity}
+                    <strong
+                      style={{
+                        color:
+                          p.stock_quantity <= 0
+                            ? '#e74c3c'
+                            : p.stock_quantity < 10
+                              ? '#e67e22'
+                              : '#333'
+                      }}
+                    >
+                      {p.stock_quantity <= 0 ? 'نفذ' : p.stock_quantity}
                     </strong>
                   </td>
                   <td className="actions-cell">
@@ -156,7 +182,7 @@ function Inventory() {
                 <input
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="مثال: إثيوبي يرغاتشيف"
+                  placeholder="مثال: بن تركي"
                   required
                 />
               </div>
@@ -185,16 +211,28 @@ function Inventory() {
                 </div>
               </div>
               <div className="form-group">
-                <label>شكل التغليف</label>
-                <select
-                  value={form.packaging_form}
-                  onChange={(e) => setForm({ ...form, packaging_form: e.target.value })}
-                >
-                  <option value="كواد سيل">كواد سيل</option>
-                  <option value="سنتر سيل">سنتر سيل</option>
-                  <option value="ستاند أب باوتش">ستاند أب باوتش</option>
-                  <option value="فلات بوتوم">فلات بوتوم</option>
-                </select>
+                <label>صورة المنتج</label>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                  {form.image && (
+                    <img
+                      src={form.image}
+                      alt="صورة"
+                      style={{ width: 60, height: 60, borderRadius: 8, objectFit: 'cover' }}
+                    />
+                  )}
+                  <button type="button" className="btn btn-sm" onClick={handlePickImage}>
+                    {form.image ? 'تغيير الصورة' : 'اختيار صورة'}
+                  </button>
+                  {form.image && (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-danger"
+                      onClick={() => setForm({ ...form, image: null })}
+                    >
+                      حذف
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="form-row">
                 <div className="form-group">

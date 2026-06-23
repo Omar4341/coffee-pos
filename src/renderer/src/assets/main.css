@@ -242,4 +242,43 @@ th {
 .actions-cell {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge-cancelled {
+  background: #fde0e0;
+  color: #c0392b;
+}
+
+.modal-lg {
+  max-width: 650px;
+  width: 95%;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.search-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.search-item:hover {
+  background: #faf6f0;
+}
+
+.search-item:last-child {
+  border-bottom: none;
 }

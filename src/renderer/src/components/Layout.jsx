@@ -6,7 +6,8 @@ const navItems = [
   { path: '/inventory', label: 'المخزون', icon: '📦' },
   { path: '/orders', label: 'الطلبات', icon: '🛒' },
   { path: '/finance', label: 'المالية', icon: '💰' },
-  { path: '/customers', label: 'العملاء', icon: '👥' }
+  { path: '/customers', label: 'العملاء', icon: '👥' },
+  { path: '/delivery', label: 'التوصيل', icon: '🚚' }
 ]
 
 function Layout() {
