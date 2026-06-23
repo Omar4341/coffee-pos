@@ -2,10 +2,10 @@ import { NavLink, Outlet } from 'react-router-dom'
 import './Layout.css'
 
 const navItems = [
-  { path: '/inventory', label: 'Inventory', icon: '📦' },
-  { path: '/orders', label: 'Orders', icon: '🛒' },
-  { path: '/finance', label: 'Finance', icon: '💰' },
-  { path: '/customers', label: 'Customers', icon: '👥' }
+  { path: '/inventory', label: 'المخزون', icon: '📦' },
+  { path: '/orders', label: 'الطلبات', icon: '🛒' },
+  { path: '/finance', label: 'المالية', icon: '💰' },
+  { path: '/customers', label: 'العملاء', icon: '👥' }
 ]
 
 function Layout() {
@@ -13,8 +13,8 @@ function Layout() {
     <div className="app-layout">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <h2>Coffee POS</h2>
-          <span className="subtitle">Mini ERP</span>
+          <h2>كوفي بوس</h2>
+          <span className="subtitle">نظام نقاط البيع</span>
         </div>
         <nav className="sidebar-nav">
           {navItems.map((item) => (

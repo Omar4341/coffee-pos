@@ -84,47 +84,47 @@ function Finance() {
   }
 
   const deleteExpense = async (id) => {
-    if (confirm('Delete this expense?')) {
+    if (confirm('هل تريد حذف هذه المصروفات؟')) {
       await window.api.deleteExpense(id)
       load()
     }
   }
 
   const deleteSalary = async (id) => {
-    if (confirm('Delete this salary entry?')) {
+    if (confirm('هل تريد حذف هذا الراتب؟')) {
       await window.api.deleteSalary(id)
       load()
     }
   }
 
-  const fmt = (n) => `$${(n || 0).toFixed(2)}`
+  const fmt = (n) => `${(n || 0).toFixed(2)} ج.م`
 
   return (
     <div>
       <div className="page-header">
-        <h1>Accounting &amp; Finance</h1>
+        <h1>المحاسبة والمالية</h1>
       </div>
 
       {summary && (
         <div className="stat-cards">
           <div className="stat-card positive">
-            <div className="stat-label">Revenue (Completed Orders)</div>
+            <div className="stat-label">الإيرادات (الطلبات المكتملة)</div>
             <div className="stat-value">{fmt(summary.totalRevenue)}</div>
           </div>
           <div className="stat-card negative">
-            <div className="stat-label">Expenses</div>
+            <div className="stat-label">المصروفات</div>
             <div className="stat-value">{fmt(summary.totalExpenses)}</div>
           </div>
           <div className="stat-card negative">
-            <div className="stat-label">Salaries</div>
+            <div className="stat-label">الرواتب</div>
             <div className="stat-value">{fmt(summary.totalSalaries)}</div>
           </div>
           <div className="stat-card negative">
-            <div className="stat-label">Product Costs</div>
+            <div className="stat-label">تكلفة المنتجات</div>
             <div className="stat-value">{fmt(summary.totalProductCosts)}</div>
           </div>
           <div className={`stat-card ${summary.netProfit >= 0 ? 'positive' : 'negative'}`}>
-            <div className="stat-label">Net Profit</div>
+            <div className="stat-label">صافي الربح</div>
             <div className="stat-value">{fmt(summary.netProfit)}</div>
           </div>
         </div>
@@ -132,23 +132,23 @@ function Finance() {
 
       {summary && (
         <div className="card" style={{ marginBottom: 20 }}>
-          <h3 style={{ marginBottom: 12 }}>Profit Breakdown</h3>
+          <h3 style={{ marginBottom: 12 }}>تفصيل الأرباح</h3>
           <div style={{ fontSize: 14, lineHeight: 2 }}>
             <div>
-              Revenue (Completed Orders): <strong>{fmt(summary.totalRevenue)}</strong>
+              الإيرادات (الطلبات المكتملة): <strong>{fmt(summary.totalRevenue)}</strong>
             </div>
             <div>
-              &minus; Expenses: <strong>{fmt(summary.totalExpenses)}</strong>
+              &minus; المصروفات: <strong>{fmt(summary.totalExpenses)}</strong>
             </div>
             <div>
-              &minus; Salaries: <strong>{fmt(summary.totalSalaries)}</strong>
+              &minus; الرواتب: <strong>{fmt(summary.totalSalaries)}</strong>
             </div>
             <div>
-              &minus; Product Costs (COGS): <strong>{fmt(summary.totalProductCosts)}</strong>
+              &minus; تكلفة المنتجات (COGS): <strong>{fmt(summary.totalProductCosts)}</strong>
             </div>
             <hr style={{ margin: '8px 0' }} />
             <div style={{ fontSize: 18 }}>
-              <strong>Net Profit: </strong>
+              <strong>صافي الربح: </strong>
               <span style={{ color: summary.netProfit >= 0 ? '#27ae60' : '#e74c3c' }}>
                 {fmt(summary.netProfit)}
               </span>
@@ -157,50 +157,50 @@ function Finance() {
         </div>
       )}
 
-      {/* Tab navigation */}
+      {/* تنقل التبويبات */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
         <button
           className={`btn ${activeTab === 'overview' ? 'btn-primary' : ''}`}
           onClick={() => setActiveTab('overview')}
           style={activeTab !== 'overview' ? { background: '#e0e0e0' } : {}}
         >
-          Overview
+          نظرة عامة
         </button>
         <button
           className={`btn ${activeTab === 'expenses' ? 'btn-primary' : ''}`}
           onClick={() => setActiveTab('expenses')}
           style={activeTab !== 'expenses' ? { background: '#e0e0e0' } : {}}
         >
-          Expenses
+          المصروفات
         </button>
         <button
           className={`btn ${activeTab === 'salaries' ? 'btn-primary' : ''}`}
           onClick={() => setActiveTab('salaries')}
           style={activeTab !== 'salaries' ? { background: '#e0e0e0' } : {}}
         >
-          Salaries
+          الرواتب
         </button>
       </div>
 
       {activeTab === 'expenses' && (
         <div className="card">
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-            <h3>Expenses</h3>
+            <h3>المصروفات</h3>
             <button className="btn btn-primary btn-sm" onClick={() => setShowExpenseModal(true)}>
-              + Add Expense
+              + إضافة مصروف
             </button>
           </div>
           {expenses.length === 0 ? (
-            <div className="empty-state">No expenses recorded yet.</div>
+            <div className="empty-state">لا توجد مصروفات مسجلة بعد.</div>
           ) : (
             <table>
               <thead>
                 <tr>
-                  <th>Description</th>
-                  <th>Category</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                  <th>Actions</th>
+                  <th>الوصف</th>
+                  <th>الفئة</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                  <th>إجراءات</th>
                 </tr>
               </thead>
               <tbody>
@@ -215,7 +215,7 @@ function Finance() {
                         className="btn btn-danger btn-sm"
                         onClick={() => deleteExpense(exp.id)}
                       >
-                        Del
+                        حذف
                       </button>
                     </td>
                   </tr>
@@ -229,22 +229,22 @@ function Finance() {
       {activeTab === 'salaries' && (
         <div className="card">
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-            <h3>Salaries</h3>
+            <h3>الرواتب</h3>
             <button className="btn btn-primary btn-sm" onClick={() => setShowSalaryModal(true)}>
-              + Add Salary
+              + إضافة راتب
             </button>
           </div>
           {salaries.length === 0 ? (
-            <div className="empty-state">No salary entries yet.</div>
+            <div className="empty-state">لا توجد رواتب مسجلة بعد.</div>
           ) : (
             <table>
               <thead>
                 <tr>
-                  <th>Employee</th>
-                  <th>Role</th>
-                  <th>Amount</th>
-                  <th>Month</th>
-                  <th>Actions</th>
+                  <th>الموظف</th>
+                  <th>الوظيفة</th>
+                  <th>المبلغ</th>
+                  <th>الشهر</th>
+                  <th>إجراءات</th>
                 </tr>
               </thead>
               <tbody>
@@ -259,7 +259,7 @@ function Finance() {
                         className="btn btn-danger btn-sm"
                         onClick={() => deleteSalary(sal.id)}
                       >
-                        Del
+                        حذف
                       </button>
                     </td>
                   </tr>
@@ -273,21 +273,21 @@ function Finance() {
       {activeTab === 'overview' && (
         <div className="card">
           <div className="empty-state">
-            Select &quot;Expenses&quot; or &quot;Salaries&quot; tabs to manage entries.
+            اختر تبويب &quot;المصروفات&quot; أو &quot;الرواتب&quot; لإدارة القيود.
             <br />
-            Revenue is automatically calculated from completed orders.
+            الإيرادات تُحسب تلقائياً من الطلبات المكتملة.
           </div>
         </div>
       )}
 
-      {/* Expense Modal */}
+      {/* نافذة إضافة مصروف */}
       {showExpenseModal && (
         <div className="modal-overlay" onClick={() => setShowExpenseModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Add Expense</h3>
+            <h3>إضافة مصروف</h3>
             <form onSubmit={handleAddExpense}>
               <div className="form-group">
-                <label>Description</label>
+                <label>الوصف</label>
                 <input
                   value={expenseForm.description}
                   onChange={(e) => setExpenseForm({ ...expenseForm, description: e.target.value })}
@@ -296,7 +296,7 @@ function Finance() {
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Amount ($)</label>
+                  <label>المبلغ (ج.م)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -306,16 +306,16 @@ function Finance() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Category</label>
+                  <label>الفئة</label>
                   <input
                     value={expenseForm.category}
                     onChange={(e) => setExpenseForm({ ...expenseForm, category: e.target.value })}
-                    placeholder="e.g. Rent, Utilities"
+                    placeholder="مثال: إيجار، مرافق"
                   />
                 </div>
               </div>
               <div className="form-group">
-                <label>Date</label>
+                <label>التاريخ</label>
                 <input
                   type="date"
                   value={expenseForm.date}
@@ -323,11 +323,11 @@ function Finance() {
                 />
               </div>
               <div className="modal-actions">
-                <button type="button" className="btn" onClick={() => setShowExpenseModal(false)}>
-                  Cancel
-                </button>
                 <button type="submit" className="btn btn-primary">
-                  Add Expense
+                  إضافة المصروف
+                </button>
+                <button type="button" className="btn" onClick={() => setShowExpenseModal(false)}>
+                  إلغاء
                 </button>
               </div>
             </form>
@@ -335,15 +335,15 @@ function Finance() {
         </div>
       )}
 
-      {/* Salary Modal */}
+      {/* نافذة إضافة راتب */}
       {showSalaryModal && (
         <div className="modal-overlay" onClick={() => setShowSalaryModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Add Salary</h3>
+            <h3>إضافة راتب</h3>
             <form onSubmit={handleAddSalary}>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Employee Name</label>
+                  <label>اسم الموظف</label>
                   <input
                     value={salaryForm.employee_name}
                     onChange={(e) =>
@@ -353,17 +353,17 @@ function Finance() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Role</label>
+                  <label>الوظيفة</label>
                   <input
                     value={salaryForm.role}
                     onChange={(e) => setSalaryForm({ ...salaryForm, role: e.target.value })}
-                    placeholder="e.g. Barista, Manager"
+                    placeholder="مثال: باريستا، مدير"
                   />
                 </div>
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Amount ($)</label>
+                  <label>المبلغ (ج.م)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -373,7 +373,7 @@ function Finance() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Month</label>
+                  <label>الشهر</label>
                   <input
                     type="month"
                     value={salaryForm.month}
@@ -382,11 +382,11 @@ function Finance() {
                 </div>
               </div>
               <div className="modal-actions">
-                <button type="button" className="btn" onClick={() => setShowSalaryModal(false)}>
-                  Cancel
-                </button>
                 <button type="submit" className="btn btn-primary">
-                  Add Salary
+                  إضافة الراتب
+                </button>
+                <button type="button" className="btn" onClick={() => setShowSalaryModal(false)}>
+                  إلغاء
                 </button>
               </div>
             </form>

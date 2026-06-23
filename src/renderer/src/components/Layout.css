@@ -1,5 +1,6 @@
 .app-layout {
   display: flex;
+  flex-direction: row-reverse;
   height: 100vh;
   background: #f5f5f5;
 }
@@ -16,6 +17,7 @@
 .sidebar-header {
   padding: 24px 20px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: right;
 }
 
 .sidebar-header h2 {
@@ -41,6 +43,7 @@
 
 .nav-item {
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;

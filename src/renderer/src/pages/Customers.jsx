@@ -48,7 +48,7 @@ function Customers() {
   }
 
   const handleDelete = async (id) => {
-    if (confirm('Delete this customer?')) {
+    if (confirm('هل تريد حذف هذا العميل؟')) {
       await window.api.deleteCustomer(id)
       load()
     }
@@ -62,9 +62,9 @@ function Customers() {
 
   const statusBadge = (status) => {
     const cls = {
-      Pending: 'badge-pending',
-      'Out for Delivery': 'badge-delivery',
-      Completed: 'badge-completed'
+      'قيد الانتظار': 'badge-pending',
+      'جاري التوصيل': 'badge-delivery',
+      مكتمل: 'badge-completed'
     }
     return <span className={`badge ${cls[status] || ''}`}>{status}</span>
   }
@@ -72,31 +72,31 @@ function Customers() {
   return (
     <div>
       <div className="page-header">
-        <h1>Customer Management</h1>
+        <h1>إدارة العملاء</h1>
         <button className="btn btn-primary" onClick={openAdd}>
-          + Add Customer
+          + إضافة عميل
         </button>
       </div>
 
       <div className="stat-cards">
         <div className="stat-card">
-          <div className="stat-label">Total Customers</div>
+          <div className="stat-label">إجمالي العملاء</div>
           <div className="stat-value">{customers.length}</div>
         </div>
       </div>
 
       <div className="card">
         {customers.length === 0 ? (
-          <div className="empty-state">No customers yet. Add your first customer!</div>
+          <div className="empty-state">لا يوجد عملاء بعد. أضف أول عميل!</div>
         ) : (
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Registered</th>
-                <th>Actions</th>
+                <th>الاسم</th>
+                <th>الهاتف</th>
+                <th>العنوان</th>
+                <th>تاريخ التسجيل</th>
+                <th>إجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -107,16 +107,16 @@ function Customers() {
                   </td>
                   <td>{c.phone || '-'}</td>
                   <td>{c.address || '-'}</td>
-                  <td>{new Date(c.created_at).toLocaleDateString()}</td>
+                  <td>{new Date(c.created_at).toLocaleDateString('ar-EG')}</td>
                   <td className="actions-cell">
                     <button className="btn btn-sm btn-primary" onClick={() => viewOrders(c)}>
-                      Orders
+                      الطلبات
                     </button>
                     <button className="btn btn-sm btn-primary" onClick={() => openEdit(c)}>
-                      Edit
+                      تعديل
                     </button>
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(c.id)}>
-                      Del
+                      حذف
                     </button>
                   </td>
                 </tr>
@@ -126,14 +126,14 @@ function Customers() {
         )}
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* نافذة إضافة/تعديل */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{editing ? 'Edit Customer' : 'Add New Customer'}</h3>
+            <h3>{editing ? 'تعديل العميل' : 'إضافة عميل جديد'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>Name</label>
+                <label>الاسم</label>
                 <input
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -142,28 +142,28 @@ function Customers() {
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Phone Number</label>
+                  <label>رقم الهاتف</label>
                   <input
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    placeholder="e.g. +20 123 456 7890"
+                    placeholder="مثال: 01012345678"
                   />
                 </div>
                 <div className="form-group">
-                  <label>Address</label>
+                  <label>العنوان</label>
                   <input
                     value={form.address}
                     onChange={(e) => setForm({ ...form, address: e.target.value })}
-                    placeholder="Delivery address"
+                    placeholder="عنوان التوصيل"
                   />
                 </div>
               </div>
               <div className="modal-actions">
-                <button type="button" className="btn" onClick={() => setShowModal(false)}>
-                  Cancel
-                </button>
                 <button type="submit" className="btn btn-primary">
-                  {editing ? 'Update' : 'Add Customer'}
+                  {editing ? 'تحديث' : 'إضافة العميل'}
+                </button>
+                <button type="button" className="btn" onClick={() => setShowModal(false)}>
+                  إلغاء
                 </button>
               </div>
             </form>
@@ -171,21 +171,21 @@ function Customers() {
         </div>
       )}
 
-      {/* Customer Orders Modal */}
+      {/* نافذة طلبات العميل */}
       {showOrders && (
         <div className="modal-overlay" onClick={() => setShowOrders(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Orders for {showOrders.name}</h3>
+            <h3>طلبات {showOrders.name}</h3>
             {customerOrders.length === 0 ? (
-              <div className="empty-state">No orders for this customer yet.</div>
+              <div className="empty-state">لا توجد طلبات لهذا العميل بعد.</div>
             ) : (
               <table>
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th>Date</th>
+                    <th>الحالة</th>
+                    <th>الإجمالي</th>
+                    <th>التاريخ</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -193,8 +193,8 @@ function Customers() {
                     <tr key={o.id}>
                       <td>{o.id}</td>
                       <td>{statusBadge(o.status)}</td>
-                      <td>${o.total_amount.toFixed(2)}</td>
-                      <td>{new Date(o.created_at).toLocaleDateString()}</td>
+                      <td>{o.total_amount.toFixed(2)} ج.م</td>
+                      <td>{new Date(o.created_at).toLocaleDateString('ar-EG')}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -202,7 +202,7 @@ function Customers() {
             )}
             <div className="modal-actions">
               <button className="btn btn-primary" onClick={() => setShowOrders(null)}>
-                Close
+                إغلاق
               </button>
             </div>
           </div>

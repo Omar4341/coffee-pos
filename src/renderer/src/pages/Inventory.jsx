@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 const emptyProduct = {
   name: '',
-  roast_level: 'Medium',
-  type: 'Plain',
-  packaging_form: 'Quad Seal',
+  roast_level: 'متوسط',
+  type: 'سادة',
+  packaging_form: 'كواد سيل',
   price: '',
   cost: '',
   stock_quantity: ''
@@ -15,11 +15,8 @@ function Inventory() {
   const [showModal, setShowModal] = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState(emptyProduct)
-  const refreshRef = useRef(0)
 
   const load = useCallback(() => {
-    refreshRef.current += 1
-    setProducts([]) // trigger re-render
     window.api.getProducts().then(setProducts)
   }, [])
 
@@ -71,7 +68,7 @@ function Inventory() {
   }
 
   const handleDelete = async (id) => {
-    if (confirm('Delete this product?')) {
+    if (confirm('هل تريد حذف هذا المنتج؟')) {
       await window.api.deleteProduct(id)
       load()
     }
@@ -82,38 +79,38 @@ function Inventory() {
   return (
     <div>
       <div className="page-header">
-        <h1>Inventory &amp; Products</h1>
+        <h1>المخزون والمنتجات</h1>
         <button className="btn btn-primary" onClick={openAdd}>
-          + Add Product
+          + إضافة منتج
         </button>
       </div>
 
       <div className="stat-cards">
         <div className="stat-card">
-          <div className="stat-label">Total Products</div>
+          <div className="stat-label">إجمالي المنتجات</div>
           <div className="stat-value">{products.length}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Total Stock (bags)</div>
+          <div className="stat-label">إجمالي المخزون (أكياس)</div>
           <div className="stat-value">{totalStock}</div>
         </div>
       </div>
 
       <div className="card">
         {products.length === 0 ? (
-          <div className="empty-state">No products yet. Add your first 200g coffee bag!</div>
+          <div className="empty-state">لا توجد منتجات بعد. أضف أول كيس قهوة 200 جرام!</div>
         ) : (
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Roast</th>
-                <th>Type</th>
-                <th>Packaging</th>
-                <th>Price</th>
-                <th>Cost</th>
-                <th>Stock</th>
-                <th>Actions</th>
+                <th>الاسم</th>
+                <th>درجة التحميص</th>
+                <th>النوع</th>
+                <th>التغليف</th>
+                <th>السعر</th>
+                <th>التكلفة</th>
+                <th>المخزون</th>
+                <th>إجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -122,13 +119,13 @@ function Inventory() {
                   <td>
                     <strong>{p.name}</strong>
                     <br />
-                    <span style={{ fontSize: 11, color: '#999' }}>200g Bag</span>
+                    <span style={{ fontSize: 11, color: '#999' }}>كيس 200 جرام</span>
                   </td>
                   <td>{p.roast_level}</td>
                   <td>{p.type}</td>
                   <td>{p.packaging_form}</td>
-                  <td>${p.price.toFixed(2)}</td>
-                  <td>${p.cost.toFixed(2)}</td>
+                  <td>{p.price.toFixed(2)} ج.م</td>
+                  <td>{p.cost.toFixed(2)} ج.م</td>
                   <td>
                     <strong style={{ color: p.stock_quantity < 10 ? '#e74c3c' : '#333' }}>
                       {p.stock_quantity}
@@ -136,10 +133,10 @@ function Inventory() {
                   </td>
                   <td className="actions-cell">
                     <button className="btn btn-primary btn-sm" onClick={() => openEdit(p)}>
-                      Edit
+                      تعديل
                     </button>
                     <button className="btn btn-danger btn-sm" onClick={() => handleDelete(p.id)}>
-                      Del
+                      حذف
                     </button>
                   </td>
                 </tr>
@@ -152,56 +149,56 @@ function Inventory() {
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{editing ? 'Edit Product' : 'Add New Product'}</h3>
+            <h3>{editing ? 'تعديل المنتج' : 'إضافة منتج جديد'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>Product Name</label>
+                <label>اسم المنتج</label>
                 <input
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="e.g. Ethiopian Yirgacheffe"
+                  placeholder="مثال: إثيوبي يرغاتشيف"
                   required
                 />
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Roast Level</label>
+                  <label>درجة التحميص</label>
                   <select
                     value={form.roast_level}
                     onChange={(e) => setForm({ ...form, roast_level: e.target.value })}
                   >
-                    <option>Light</option>
-                    <option>Medium</option>
-                    <option>Dark</option>
+                    <option value="فاتح">فاتح</option>
+                    <option value="متوسط">متوسط</option>
+                    <option value="غامق">غامق</option>
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Type</label>
+                  <label>النوع</label>
                   <select
                     value={form.type}
                     onChange={(e) => setForm({ ...form, type: e.target.value })}
                   >
-                    <option>Plain</option>
-                    <option>Spiced</option>
-                    <option>Flavored</option>
+                    <option value="سادة">سادة</option>
+                    <option value="بتوابل">بتوابل</option>
+                    <option value="بنكهة">بنكهة</option>
                   </select>
                 </div>
               </div>
               <div className="form-group">
-                <label>Packaging Form</label>
+                <label>شكل التغليف</label>
                 <select
                   value={form.packaging_form}
                   onChange={(e) => setForm({ ...form, packaging_form: e.target.value })}
                 >
-                  <option>Quad Seal</option>
-                  <option>Centre Seal</option>
-                  <option>Stand Up Pouch</option>
-                  <option>Flat Bottom</option>
+                  <option value="كواد سيل">كواد سيل</option>
+                  <option value="سنتر سيل">سنتر سيل</option>
+                  <option value="ستاند أب باوتش">ستاند أب باوتش</option>
+                  <option value="فلات بوتوم">فلات بوتوم</option>
                 </select>
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Selling Price ($)</label>
+                  <label>سعر البيع (ج.م)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -211,7 +208,7 @@ function Inventory() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Cost ($)</label>
+                  <label>التكلفة (ج.م)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -222,7 +219,7 @@ function Inventory() {
                 </div>
               </div>
               <div className="form-group">
-                <label>Stock Quantity</label>
+                <label>الكمية في المخزون</label>
                 <input
                   type="number"
                   value={form.stock_quantity}
@@ -231,11 +228,11 @@ function Inventory() {
                 />
               </div>
               <div className="modal-actions">
-                <button type="button" className="btn" onClick={() => setShowModal(false)}>
-                  Cancel
-                </button>
                 <button type="submit" className="btn btn-primary">
-                  {editing ? 'Update' : 'Add Product'}
+                  {editing ? 'تحديث' : 'إضافة المنتج'}
+                </button>
+                <button type="button" className="btn" onClick={() => setShowModal(false)}>
+                  إلغاء
                 </button>
               </div>
             </form>
