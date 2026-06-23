@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 
-const emptyCustomer = { name: '', phone: '', address: '' }
+const emptyCustomer = { name: '', phone: '', phone2: '', address: '' }
 
 function Customers() {
   const [customers, setCustomers] = useState([])
@@ -9,6 +9,7 @@ function Customers() {
   const [form, setForm] = useState(emptyCustomer)
   const [showOrders, setShowOrders] = useState(null)
   const [customerOrders, setCustomerOrders] = useState([])
+  const [search, setSearch] = useState('')
 
   const load = useCallback(() => {
     window.api.getCustomers().then(setCustomers)
@@ -32,7 +33,12 @@ function Customers() {
 
   const openEdit = (customer) => {
     setEditing(customer)
-    setForm({ name: customer.name, phone: customer.phone || '', address: customer.address || '' })
+    setForm({
+      name: customer.name,
+      phone: customer.phone || '',
+      phone2: customer.phone2 || '',
+      address: customer.address || ''
+    })
     setShowModal(true)
   }
 
@@ -64,10 +70,21 @@ function Customers() {
     const cls = {
       'قيد الانتظار': 'badge-pending',
       'جاري التوصيل': 'badge-delivery',
-      مكتمل: 'badge-completed'
+      مكتمل: 'badge-completed',
+      ملغي: 'badge-cancelled'
     }
     return <span className={`badge ${cls[status] || ''}`}>{status}</span>
   }
+
+  const filtered = customers.filter((c) => {
+    if (!search) return true
+    const q = search.toLowerCase()
+    return (
+      c.name.toLowerCase().includes(q) ||
+      (c.phone && c.phone.includes(q)) ||
+      (c.phone2 && c.phone2.includes(q))
+    )
+  })
 
   return (
     <div>
@@ -85,27 +102,40 @@ function Customers() {
         </div>
       </div>
 
+      <div className="card" style={{ marginBottom: 12 }}>
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="بحث بالاسم أو رقم التلفون..."
+          style={{ width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: 8 }}
+        />
+      </div>
+
       <div className="card">
-        {customers.length === 0 ? (
-          <div className="empty-state">لا يوجد عملاء بعد. أضف أول عميل!</div>
+        {filtered.length === 0 ? (
+          <div className="empty-state">
+            {customers.length === 0 ? 'لا يوجد عملاء بعد. أضف أول عميل!' : 'لا توجد نتائج'}
+          </div>
         ) : (
           <table>
             <thead>
               <tr>
                 <th>الاسم</th>
                 <th>الهاتف</th>
+                <th>هاتف 2</th>
                 <th>العنوان</th>
                 <th>تاريخ التسجيل</th>
                 <th>إجراءات</th>
               </tr>
             </thead>
             <tbody>
-              {customers.map((c) => (
+              {filtered.map((c) => (
                 <tr key={c.id}>
                   <td>
                     <strong>{c.name}</strong>
                   </td>
                   <td>{c.phone || '-'}</td>
+                  <td>{c.phone2 || '-'}</td>
                   <td>{c.address || '-'}</td>
                   <td>{new Date(c.created_at).toLocaleDateString('ar-EG')}</td>
                   <td className="actions-cell">
@@ -150,13 +180,21 @@ function Customers() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>العنوان</label>
+                  <label>رقم هاتف آخر (اختياري)</label>
                   <input
-                    value={form.address}
-                    onChange={(e) => setForm({ ...form, address: e.target.value })}
-                    placeholder="عنوان التوصيل"
+                    value={form.phone2}
+                    onChange={(e) => setForm({ ...form, phone2: e.target.value })}
+                    placeholder="رقم احتياطي"
                   />
                 </div>
+              </div>
+              <div className="form-group">
+                <label>العنوان</label>
+                <input
+                  value={form.address}
+                  onChange={(e) => setForm({ ...form, address: e.target.value })}
+                  placeholder="عنوان التوصيل"
+                />
               </div>
               <div className="modal-actions">
                 <button type="submit" className="btn btn-primary">

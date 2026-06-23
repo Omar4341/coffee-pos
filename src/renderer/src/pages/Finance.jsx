@@ -272,11 +272,37 @@ function Finance() {
 
       {activeTab === 'overview' && (
         <div className="card">
-          <div className="empty-state">
-            اختر تبويب &quot;المصروفات&quot; أو &quot;الرواتب&quot; لإدارة القيود.
-            <br />
-            الإيرادات تُحسب تلقائياً من الطلبات المكتملة.
-          </div>
+          {summary && summary.deliveryPersonCosts && summary.deliveryPersonCosts.length > 0 ? (
+            <>
+              <h3 style={{ marginBottom: 12 }}>إحصائيات الدليفري</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>الدليفري</th>
+                    <th>عدد التوصيلات</th>
+                    <th>إجمالي رسوم التوصيل</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {summary.deliveryPersonCosts.map((dp) => (
+                    <tr key={dp.id}>
+                      <td>
+                        <strong>{dp.name}</strong>
+                      </td>
+                      <td>{dp.trips}</td>
+                      <td>{dp.total_fees.toFixed(2)} ج.م</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <div className="empty-state">
+              اختر تبويب &quot;المصروفات&quot; أو &quot;الرواتب&quot; لإدارة القيود.
+              <br />
+              الإيرادات تُحسب تلقائياً من الطلبات المكتملة.
+            </div>
+          )}
         </div>
       )}
 
