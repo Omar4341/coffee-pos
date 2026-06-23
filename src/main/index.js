@@ -25,6 +25,7 @@ import {
   updateDeliveryPerson,
   deleteDeliveryPerson,
   getAllOrders,
+  getOrderById,
   addOrder,
   updateOrder,
   updateOrderStatus,
@@ -39,6 +40,13 @@ import {
   deleteSalary,
   getFinanceSummary
 } from './database'
+import {
+  initWhatsApp,
+  disconnectWhatsApp,
+  getWhatsAppStatus,
+  sendOrderStatusMessage,
+  setMainWindow
+} from './whatsapp'
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -67,6 +75,9 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  setMainWindow(mainWindow)
+  return mainWindow
 }
 
 function registerIpcHandlers() {
@@ -115,7 +126,22 @@ function registerIpcHandlers() {
   ipcMain.handle('orders:getAll', () => getAllOrders())
   ipcMain.handle('orders:add', (_e, { order, items }) => addOrder(order, items))
   ipcMain.handle('orders:update', (_e, { order, items }) => updateOrder(order, items))
-  ipcMain.handle('orders:updateStatus', (_e, { id, status }) => updateOrderStatus(id, status))
+  ipcMain.handle('orders:updateStatus', async (_e, { id, status }) => {
+    const result = updateOrderStatus(id, status)
+    // Auto-send WhatsApp message on status change
+    if (status === 'جاري التوصيل' || status === 'مكتمل') {
+      try {
+        const order = getOrderById(id)
+        if (order && order.customer_phone) {
+          const items = getOrderItems(id)
+          await sendOrderStatusMessage(order, items, order.customer_phone, status)
+        }
+      } catch (err) {
+        console.error('[WhatsApp] Auto-send failed:', err.message)
+      }
+    }
+    return result
+  })
   ipcMain.handle('orders:cancel', (_e, id) => cancelOrder(id))
   ipcMain.handle('orders:getItems', (_e, orderId) => getOrderItems(orderId))
   ipcMain.handle('orders:delete', (_e, id) => deleteOrder(id))
@@ -132,6 +158,24 @@ function registerIpcHandlers() {
 
   // Finance
   ipcMain.handle('finance:getSummary', () => getFinanceSummary())
+
+  // WhatsApp
+  ipcMain.handle('whatsapp:init', () => {
+    initWhatsApp()
+    return { success: true }
+  })
+  ipcMain.handle('whatsapp:disconnect', () => {
+    disconnectWhatsApp()
+    return { success: true }
+  })
+  ipcMain.handle('whatsapp:getStatus', () => getWhatsAppStatus())
+  ipcMain.handle('whatsapp:sendMessage', async (_e, { orderId, status }) => {
+    const order = getOrderById(orderId)
+    if (!order) return { success: false, error: 'الطلب غير موجود' }
+    if (!order.customer_phone) return { success: false, error: 'العميل ليس لديه رقم تلفون' }
+    const items = getOrderItems(orderId)
+    return sendOrderStatusMessage(order, items, order.customer_phone, status)
+  })
 }
 
 app.whenReady().then(() => {

@@ -51,7 +51,18 @@ const api = {
   deleteSalary: (id) => ipcRenderer.invoke('salaries:delete', id),
 
   // Finance
-  getFinanceSummary: () => ipcRenderer.invoke('finance:getSummary')
+  getFinanceSummary: () => ipcRenderer.invoke('finance:getSummary'),
+
+  // WhatsApp
+  whatsappInit: () => ipcRenderer.invoke('whatsapp:init'),
+  whatsappDisconnect: () => ipcRenderer.invoke('whatsapp:disconnect'),
+  whatsappGetStatus: () => ipcRenderer.invoke('whatsapp:getStatus'),
+  whatsappSendMessage: (orderId, status) =>
+    ipcRenderer.invoke('whatsapp:sendMessage', { orderId, status }),
+  onWhatsAppStatus: (callback) => {
+    ipcRenderer.on('whatsapp:status', (_e, data) => callback(data))
+    return () => ipcRenderer.removeAllListeners('whatsapp:status')
+  }
 }
 
 if (process.contextIsolated) {
