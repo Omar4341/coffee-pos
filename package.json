@@ -1,7 +1,7 @@
 {
   "name": "ben-alaraishy-pos",
   "version": "1.0.0",
-  "description": "سيستم بن العريشي - نظام نقاط البيع",
+  "description": "سيستم بن العرايشي - نظام نقاط البيع",
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://electron-vite.org",

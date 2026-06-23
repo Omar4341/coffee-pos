@@ -14,8 +14,8 @@ function Layout() {
     <div className="app-layout">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <img src={logoImg} alt="بن العريشي" className="sidebar-logo" />
-          <span className="subtitle">سيستم بن العريشي</span>
+          <img src={logoImg} alt="بن العرايشي" className="sidebar-logo" />
+          <span className="subtitle">سيستم بن العرايشي</span>
         </div>
         <nav className="sidebar-nav">
           {navItems.map((item) => (
